@@ -13,3 +13,5 @@ If no gcode argument or file is provided the user will be asked to type it in th
 An argument can be added to enable an infinite loop until exit is typed.
 This should allow a user to create a screen and send commands from a different script"PHP".
 
+Commands
+python3 pyGCodeLoader.py --help
