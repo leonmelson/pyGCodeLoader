@@ -1,6 +1,8 @@
 # pyGCodeLoader
 Python gcode loader
 
+Inspired by https://github.com/bborncr/gcodesender.py
+
 Requirements
 
 apt install python3 python3-serial
