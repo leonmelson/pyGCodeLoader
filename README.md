@@ -1,7 +1,7 @@
 # pyGCodeLoader
 Python gcode loader
 
-Requirement are 
+Requirements
 
 apt install python3 python3-serial
 
