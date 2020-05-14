@@ -1,6 +1,8 @@
 # pyGCodeLoader
 Python gcode loader
+
 Requirement are 
+
 apt install python3 python3-serial
 
 Allows the user to load gcode as a path to a file or to add it as a argument with a seperater.
