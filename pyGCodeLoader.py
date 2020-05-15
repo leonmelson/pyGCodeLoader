@@ -4,7 +4,7 @@ import argparse
 import serial
 import time
 import os.path
-
+from datetime import datetime
 start_time = time.time()
 inf = 1
 parser = argparse.ArgumentParser(description='pyGCodeLoader')
@@ -108,7 +108,7 @@ while(inf==1):
                 else:
                     #Add log for sent
                     if(args.log != None):
-                        logfile.write(" - send: %s\r\n" % (code.strip()))
+                        logfile.write(datetime.now().strftime("%d-%b-%Y %H:%M:%S.%f") + " - send: " + code.strip() + "\r\n")
                     print(' Sending:   ' + code.strip())
                     SPort.write(str.encode(code))
                     if(args.wait != None):
@@ -118,7 +118,7 @@ while(inf==1):
                             ReadPort = ReadPort.strip()
                             #Add log for received
                             if(args.log != None and args.wait != None):
-                                logfile.write(" - recv: %s\r\n" % (ReadPort))   
+                                logfile.write(datetime.now().strftime("%d-%b-%Y %H:%M:%S.%f") + " - recv: " + ReadPort + "\r\n")   
                             print(' Received: ',ReadPort)
                             if(ReadPort.find(args.wait) >= 0):
                                 break
