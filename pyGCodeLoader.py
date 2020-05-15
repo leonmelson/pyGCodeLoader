@@ -3,6 +3,7 @@
 import argparse
 import serial
 import time
+import os.path
 
 start_time = time.time()
 inf = 1
@@ -52,7 +53,10 @@ if(args.port != None and args.portbaud != None):
 else:
     print("\n Port not added exiting\n")
     exit()
-            
+# Write serail sent and recieved commands to a log file
+if(args.log != None):
+    logfile=open(args.log, "a+")
+
 # Read FILE in if code is empty
 if(args.file != None and args.code == None):
     print (' GCode File is being opened')
@@ -64,7 +68,7 @@ if(args.file != None and args.code == None):
 
 # Read GCODE if file is empty
 elif(args.code != None and args.file == None):
-    print (' GCode is being sorted')
+    print (' GCode is being sorted\n')
     ReadGCode = args.code.split("<>")
     #print (" ",ReadGCode)
 
@@ -93,7 +97,7 @@ while(inf==1):
             #print (" ",ReadGCode)
     
     if(ReadGCode!=""):    
-        print(' Staring loading GCode')
+        print(' Staring loading GCode\n')
 
         for GCode in ReadGCode:
             code = GCodeLineFixer(GCode)
@@ -102,13 +106,19 @@ while(inf==1):
                     print(' Sending:   ' + code)
                     print(" Debug Mode")
                 else:
-                    print(' Sending:   ' + code)
+                    #Add log for sent
+                    if(args.log != None):
+                        logfile.write(" - send: %s\r\n" % (code.strip()))
+                    print(' Sending:   ' + code.strip())
                     SPort.write(str.encode(code))
                     if(args.wait != None):
                         while(inf==1):
                             ReadPort = SPort.readline()
                             ReadPort = ReadPort.decode("utf-8")
                             ReadPort = ReadPort.strip()
+                            #Add log for received
+                            if(args.log != None and args.wait != None):
+                                logfile.write(" - recv: %s\r\n" % (ReadPort))   
                             print(' Received: ',ReadPort)
                             if(ReadPort.find(args.wait) >= 0):
                                 break
@@ -123,7 +133,8 @@ while(inf==1):
             print (" >>>>>>>>>>")
             print (" >>>>>>>>>>>>>>>>")
             break
-
+if(args.log != None):
+    logfile.close()
 SPort.close()
 SPort.close()
 print("--- %s seconds ---" % (time.time() - start_time))
