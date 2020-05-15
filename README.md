@@ -7,7 +7,7 @@ Requirements
 
 apt install python3 python3-serial
 
-Allows the user to load gcode as a path to a file or to add it as a argument with a separator.
+Allows the user to load gcode as a path to a file or to add it as an argument with a separator.
 If no gcode argument or file is provided the user will be asked to type it in the script.
 
 An argument can be added to enable an infinite loop until exit is typed.
@@ -28,11 +28,11 @@ optional arguments:
 
   -p PORT, --port PORT  TTY/COM port path in '' if folders have spaces
 
-  -pb PORTBAUD, --portbaud PORTBAUD Baudrate
+  -pb PORTBAUD, --portbaud PORT Baud rate
 
   -f FILE, --file FILE  Gcode file path in '' if folders have spaces
 
-  -c CODE, --code CODE  Gcode string seperated by <> enclosed in ''
+  -c CODE, --code CODE  Gcode string separated by <> enclosed in ''
 
   -w WAIT, --wait WAIT  Wait for a value="ok" to get returned before sending next line
 
@@ -42,7 +42,7 @@ optional arguments:
 
   -inf INFLOOP, --infloop INFLOOP Infinite loop with manual code add until exit is typed = enable
 
-  -debug DEBUG, --debug DEBUG Disable Writing to port and disable -w --wait funtion as not return will be available = enable
+  -debug DEBUG, --debug DEBUG Disable Writing to port and disable -w --wait function as no return will be available = enable
 
 Example
 
