@@ -1,5 +1,5 @@
 # pyGCodeLoader
-Python gcode loader
+Python GCode loader
 
 Inspired by https://github.com/bborncr/gcodesender.py and https://onehossshay.wordpress.com/2011/08/26/grbl-a-simple-python-interface/
 

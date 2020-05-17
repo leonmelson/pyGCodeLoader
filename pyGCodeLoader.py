@@ -16,7 +16,7 @@ parser.add_argument('-w', '--wait', help='Wait for a value="ok" to get returned 
 parser.add_argument('-s', '--sleep', help='Sleep time = float = 0.001 between each command sent')
 parser.add_argument('-l', '--log', help="Append Log file path in '' if folders have spaces")
 parser.add_argument('-inf', '--infloop', help='Infinite loop with manual code add until exit is typed = enable')
-parser.add_argument('-debug', '--debug', help='Disable Writing to port and disable -w --wait funtion as not return will be available = enable')
+parser.add_argument('-debug', '--debug', help='Disable Writing to port and disable -w --wait function as not return will be available = enable')
 args = parser.parse_args()
 #Disable Wait if Debug is enabled
 if(args.debug=="enable"):
@@ -53,7 +53,7 @@ if(args.port != None and args.portbaud != None):
 else:
     print("\n Port not added exiting\n")
     exit()
-# Write serail sent and recieved commands to a log file
+# Write serail sent and received commands to a log file
 if(args.log != None):
     logfile=open(args.log, "a+")
 
