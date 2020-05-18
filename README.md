@@ -54,12 +54,18 @@ python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -f /media/file/gcode.gcode
 
 Screen Example
 
-#Run pyGCodeLoader as Daemon
+# Run pyGCodeLoader as Daemon
 
-screen -dmS 3DPRINTER1 #start a screen
+# OPEN A SCREEN
 
-screen -S 3DPRINTER1 -X stuff "python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -inf enable^M" Start pyGCodeLoader as Daemon
+screen -dmS 3DPRINTER1
 
-screen -S 3DPRINTER1 -X stuff "G28<>G1 X100 Y100^M" #Send a command
+# START pyGCodeLoader IN THE SCREEN
+
+screen -S 3DPRINTER1 -X stuff "python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -inf enable^M"
+
+# SEND COMMANDS TO SCREEN
+
+screen -S 3DPRINTER1 -X stuff "G28<>G1 X100 Y100^M" # Send a command
 
 
