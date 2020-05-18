@@ -130,3 +130,9 @@ dmypy.json
 
 # VSCode
 .vscode-upload.json
+
+# History
+.history/
+
+#GitHub
+.gitignore

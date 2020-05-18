@@ -16,7 +16,7 @@ parser.add_argument('-w', '--wait', help='Wait for a value="ok" to get returned 
 parser.add_argument('-s', '--sleep', help='Sleep time = float = 0.001 between each command sent')
 parser.add_argument('-l', '--log', help="Append Log file path in '' if folders have spaces")
 parser.add_argument('-inf', '--infloop', help='Infinite loop with manual code add until exit is typed = enable')
-parser.add_argument('-debug', '--debug', help='Disable Writing to port and disable -w --wait function as not return will be available = enable')
+parser.add_argument('-debug', '--debug', help='Disable Writing to port and disable -w --wait funtion as not return will be available = enable')
 args = parser.parse_args()
 #Disable Wait if Debug is enabled
 if(args.debug=="enable"):
@@ -53,9 +53,6 @@ if(args.port != None and args.portbaud != None):
 else:
     print("\n Port not added exiting\n")
     exit()
-# Write serail sent and received commands to a log file
-if(args.log != None):
-    logfile=open(args.log, "a+")
 
 # Read FILE in if code is empty
 if(args.file != None and args.code == None):
@@ -108,6 +105,7 @@ while(inf==1):
                 else:
                     #Add log for sent
                     if(args.log != None):
+                        logfile=open(args.log, "a+")
                         logfile.write(datetime.now().strftime("%d-%b-%Y %H:%M:%S.%f") + " - send: " + code.strip() + "\r\n")
                     print(' Sending:   ' + code.strip())
                     SPort.write(str.encode(code))
@@ -118,9 +116,12 @@ while(inf==1):
                             ReadPort = ReadPort.strip()
                             #Add log for received
                             if(args.log != None and args.wait != None):
+                                logfile=open(args.log, "a+")
                                 logfile.write(datetime.now().strftime("%d-%b-%Y %H:%M:%S.%f") + " - recv: " + ReadPort + "\r\n")   
                             print(' Received: ',ReadPort)
                             if(ReadPort.find(args.wait) >= 0):
+                                if(args.log != None and args.wait != None):
+                                    logfile.close()
                                 break
                     #print (ReadPort)
             if(args.sleep!=None):
@@ -133,7 +134,8 @@ while(inf==1):
             print (" >>>>>>>>>>")
             print (" >>>>>>>>>>>>>>>>")
             break
-if(args.log != None):
+#Close file if Wait is empty
+if(args.log != None and args.wait == None):
     logfile.close()
 SPort.close()
 SPort.close()
