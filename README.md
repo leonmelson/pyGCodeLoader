@@ -51,3 +51,15 @@ python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200
 python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -c 'G28<>G1 X0 Y0<>M18'
 
 python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -f /media/file/gcode.gcode
+
+Screen Example
+
+#Run pyGCodeLoader as Daemon
+
+screen -dmS 3DPRINTER1 #start a screen
+
+screen -S 3DPRINTER1 -X stuff "python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -inf enable^M" Start pyGCodeLoader as Daemon
+
+screen -S 3DPRINTER1 -X stuff "G28<>G1 X100 Y100^M" #Send a command
+
+
