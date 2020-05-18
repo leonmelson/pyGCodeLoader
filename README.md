@@ -1,5 +1,5 @@
 # pyGCodeLoader
-Python GCode Loader
+## Python GCode Loader
 
 Inspired by https://github.com/bborncr/gcodesender.py and https://onehossshay.wordpress.com/2011/08/26/grbl-a-simple-python-interface/
 
@@ -14,7 +14,7 @@ An argument can be added to enable an infinite loop until exit is typed.
 This should allow a user to create a screen and send commands from a different script"PHP".
 
 # Commands
-python3 pyGCodeLoader.py --help
+## python3 pyGCodeLoader.py --help
 
 usage: pyGCodeLoader.py [-h] [-p PORT] [-pb PORTBAUD] [-f FILE] [-c CODE]
                         [-w WAIT] [-s SLEEP] [-l LOG] [-inf INFLOOP]
@@ -44,23 +44,23 @@ optional arguments:
   -debug DEBUG, --debug DEBUG Disable Writing to port and disable -w --wait function as no return will be available = enable
 
 # Example
+```
 python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200
-
 python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -c 'G28<>G1 X0 Y0<>M18'
-
 python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -f /media/file/gcode.gcode
-
+```
 # Screen Example
-# Run pyGCodeLoader as Daemon
-OPEN A SCREEN
+## Run pyGCodeLoader as Daemon
+
+**OPEN A SCREEN**
 
 screen -dmS 3DPRINTER1
 
-START pyGCodeLoader IN THE SCREEN
+**START pyGCodeLoader IN THE SCREEN**
 
 screen -S 3DPRINTER1 -X stuff "python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -inf enable^M"
 
-SEND COMMANDS TO SCREEN
+**SEND COMMANDS TO SCREEN**
 
 screen -S 3DPRINTER1 -X stuff "G28<>G1 X100 Y100^M" # Send a command
 
