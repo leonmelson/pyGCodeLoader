@@ -15,7 +15,7 @@ This should allow a user to create a screen and send commands from a different s
 
 # Commands
 ## python3 pyGCodeLoader.py --help
-
+```
 usage: pyGCodeLoader.py [-h] [-p PORT] [-pb PORTBAUD] [-f FILE] [-c CODE]
                         [-w WAIT] [-s SLEEP] [-l LOG] [-inf INFLOOP]
                         [-debug DEBUG]
@@ -24,25 +24,16 @@ pyGCodeLoader
 
 optional arguments:
   -h, --help            show this help message and exit
-
   -p PORT, --port PORT  TTY/COM port path in '' if folders have spaces
-
   -pb PORTBAUD, --portbaud PORT Baud rate
-
   -f FILE, --file FILE  Gcode file path in '' if folders have spaces
-
   -c CODE, --code CODE  Gcode string separated by <> enclosed in ''
-
   -w WAIT, --wait WAIT  Wait for a value="ok" to get returned before sending next line
-
   -s SLEEP, --sleep SLEEP Sleep time = float = 0.001 between each command sent
-
   -l LOG, --log LOG     Append Log file path in '' if folders have spaces
-
   -inf INFLOOP, --infloop INFLOOP Infinite loop with manual code add until exit is typed = enable
-
   -debug DEBUG, --debug DEBUG Disable Writing to port and disable -w --wait function as no return will be available = enable
-
+```
 # Example
 ```
 python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200
@@ -53,15 +44,10 @@ python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -f /media/file/gcode.gcode
 ## Run pyGCodeLoader as Daemon
 ```
 **OPEN A SCREEN**
-
 screen -dmS 3DPRINTER1
-
 **START pyGCodeLoader IN THE SCREEN**
-
 screen -S 3DPRINTER1 -X stuff "python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -inf enable^M"
-
 **SEND COMMANDS TO SCREEN**
-
 screen -S 3DPRINTER1 -X stuff "G28<>G1 X100 Y100^M" # Send a command
 ```
 
