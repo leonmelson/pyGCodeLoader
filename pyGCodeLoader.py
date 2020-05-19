@@ -106,7 +106,7 @@ while(inf==1):
                     #Add log for sent
                     if(args.log != None):
                         logfile=open(args.log, "a+")
-                        logfile.write(datetime.now().strftime("%d-%b-%Y %H:%M:%S.%f") + " - send: " + code.strip() + "\r\n")
+                        logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - send: " + code.strip() + "\r\n")
                     print(' Sending:   ' + code.strip())
                     SPort.write(str.encode(code))
                     if(args.wait != None):
@@ -117,7 +117,7 @@ while(inf==1):
                             #Add log for received
                             if(args.log != None and args.wait != None):
                                 logfile=open(args.log, "a+")
-                                logfile.write(datetime.now().strftime("%d-%b-%Y %H:%M:%S.%f") + " - recv: " + ReadPort + "\r\n")   
+                                logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - recv: " + ReadPort + "\r\n")   
                             print(' Received: ',ReadPort)
                             if(ReadPort.find(args.wait) >= 0):
                                 if(args.log != None and args.wait != None):
