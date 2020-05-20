@@ -61,14 +61,20 @@ if(args.file != None and args.code == None and args.url == None):
     #print (ReadGCode.readlines())
     #remove \n from lines with .read().splitlines()
     ReadGCode = GCodeFile.read().splitlines()
-    #print (ReadGCode)
+    #print (" ",ReadGCode)
 
 # Read URL
 elif(args.file == None and args.code == None and args.url != None):
     print (' Url is being opened\n')
     GCodeFile = urlopen(args.url)
-    #print (" ",ReadGCode)
-    ReadGCode = GCodeFile.read().splitlines()
+    GetGCode = GCodeFile.read()
+    GetGCode = str(GetGCode)
+    GetGCode = GetGCode.replace("b'", "")
+    GetGCode = GetGCode.replace("'", "")
+    #print (GetGCode)
+    ReadGCode = GetGCode.split('\\n')
+    #print (ReadGCode)
+    
 
 # Read GCODE if file is empty
 elif(args.code != None and args.file == None and args.url == None):
@@ -115,7 +121,7 @@ while(inf==1):
                         logfile=open(args.log, "a+")
                         logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Send: " + code.strip() + "\r\n")
                     print(' Sending:   ' + code.strip())
-                    SPort.write(str.encode(code) + '\n')
+                    SPort.write(str.encode(code + '\n'))
                     if(args.wait != None):
                         while(inf==1):
                             ReadPort = SPort.readline()
