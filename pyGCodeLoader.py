@@ -71,12 +71,12 @@ elif(args.file == None and args.code == None and args.url != None):
     ReadGCode = GCodeFile.read().splitlines()
 
 # Read GCODE if file is empty
-elif(args.code != None and args.file == None):
+elif(args.code != None and args.file == None and args.url == None):
     print (' GCode is being sorted\n')
     ReadGCode = args.code.split("<>")
     #print (" ",ReadGCode)
 
-elif(args.code == None and args.file == None):
+elif(args.code == None and args.file == None and args.url == None):
     print ("\n No File or GCode has been add Enabling Typing Mode\n")
 
 else:
@@ -86,7 +86,7 @@ else:
     #Display Functions in a Class
     #print(dir(SPort))
 while(inf==1):
-    if(args.code == None and args.file == None):
+    if(args.code == None and args.file == None and args.url == None):
         ReadGCode = input(" Waiting for command string seperated by <> enclosed in ''. \n\n >>> ")
         if(ReadGCode == 'EXIT' or ReadGCode == 'exit'):
             print ("\n\n Exiting pyGCodeLoader!!!")
