@@ -5,12 +5,15 @@ import serial
 import time
 import os.path
 from datetime import datetime
+from urllib.request import urlopen
+
 start_time = time.time()
 inf = 1
 parser = argparse.ArgumentParser(description='pyGCodeLoader')
 parser.add_argument('-p', '--port', help="TTY/COM port path in '' if folders have spaces", required=False)
 parser.add_argument('-pb', '--portbaud', help='Baudrate', required=False)
 parser.add_argument('-f', '--file', help="Gcode file path in '' if folders have spaces", required=False)
+parser.add_argument('-u', '--url', help="Url to GCode", required=False)
 parser.add_argument('-c', '--code', help="Gcode string seperated by <> enclosed in ''", required=False)
 parser.add_argument('-w', '--wait', help='Wait for a value="ok" to get returned before sending next line', required=False)
 parser.add_argument('-s', '--sleep', help='Sleep time = float = 0.001 between each command sent')
@@ -41,9 +44,6 @@ def GCodeLineFixer(code):
         code = code[0]
     else:
         code = code
-    
-    #Add \n to code
-    code = code + '\n'
     return code
 
 # Create New Serail Port
@@ -54,14 +54,21 @@ else:
     print("\n Port not added exiting\n")
     exit()
 
-# Read FILE in if code is empty
-if(args.file != None and args.code == None):
+# Read FILE if code and url is empty
+if(args.file != None and args.code == None and args.url == None):
     print (' GCode File is being opened')
     GCodeFile = open(args.file, 'r')
     #print (ReadGCode.readlines())
     #remove \n from lines with .read().splitlines()
     ReadGCode = GCodeFile.read().splitlines()
     #print (ReadGCode)
+
+# Read URL
+elif(args.file == None and args.code == None and args.url != None):
+    print (' Url is being opened\n')
+    GCodeFile = urlopen(args.url)
+    #print (" ",ReadGCode)
+    ReadGCode = GCodeFile.read().splitlines()
 
 # Read GCODE if file is empty
 elif(args.code != None and args.file == None):
@@ -98,7 +105,7 @@ while(inf==1):
 
         for GCode in ReadGCode:
             code = GCodeLineFixer(GCode)
-            if(len(code) > 0):                
+            if(len(code) > 0 or code != ""):                
                 if(args.debug == "enable"):
                     print(' Sending:   ' + code)
                     print(" Debug Mode")
@@ -108,7 +115,7 @@ while(inf==1):
                         logfile=open(args.log, "a+")
                         logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Send: " + code.strip() + "\r\n")
                     print(' Sending:   ' + code.strip())
-                    SPort.write(str.encode(code))
+                    SPort.write(str.encode(code) + '\n')
                     if(args.wait != None):
                         while(inf==1):
                             ReadPort = SPort.readline()
