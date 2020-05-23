@@ -148,12 +148,7 @@ while(inf==1):
                     #print (ReadPort)
             if(args.sleep!=None):
                 time.sleep(float(args.sleep))
-        if(args.infloop==None):
-            print ("\n\n Exiting pyGCodeLoader!!!")
-            print (" >>>>>")
-            print (" >>>>>>>>>>")
-            print (" >>>>>>>>>>>>>>>>")
-            break
+    #If Receive is enabled
     if(PortReceiveData == 1):
         ReadPort = SPort.readline()
         ReadPort = ReadPort.decode("utf-8")
@@ -163,6 +158,13 @@ while(inf==1):
             logfile=open(args.log, "a+")
             logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Recv: " + ReadPort + "\n")
         time.sleep(float(args.sleep))
+    #If Inf loop is disable exit
+    if(args.infloop==None):
+        print ("\n\n Exiting pyGCodeLoader!!!")
+        print (" >>>>>")
+        print (" >>>>>>>>>>")
+        print (" >>>>>>>>>>>>>>>>")
+        break
 #Close file if Wait is empty
 if(args.log != None and args.wait == None):
     logfile.close()
