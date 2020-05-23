@@ -8,6 +8,8 @@ from datetime import datetime
 from urllib.request import urlopen
 
 start_time = time.time()
+ReadGCode = None
+PortReceiveData = None
 inf = 1
 parser = argparse.ArgumentParser(description='pyGCodeLoader')
 parser.add_argument('-p', '--port', help="TTY/COM port path in '' if folders have spaces", required=False)
@@ -17,6 +19,7 @@ parser.add_argument('-u', '--url', help="Url to GCode", required=False)
 parser.add_argument('-c', '--code', help="Gcode string seperated by <> enclosed in ''", required=False)
 parser.add_argument('-w', '--wait', help='Wait for a value="ok" to get returned before sending next line', required=False)
 parser.add_argument('-s', '--sleep', help='Sleep time = float = 0.001 between each command sent')
+parser.add_argument('-r', '--receive', help='Receive port data with --sleep time only when --code, --url, --file is empty = enable')
 parser.add_argument('-l', '--log', help="Append Log file path in '' if folders have spaces")
 parser.add_argument('-inf', '--infloop', help='Infinite loop with manual code add until exit is typed = enable')
 parser.add_argument('-debug', '--debug', help='Disable Writing to port and disable -w --wait funtion as not return will be available = enable')
@@ -71,8 +74,10 @@ elif(args.file == None and args.code == None and args.url != None):
     GetGCode = str(GetGCode)
     GetGCode = GetGCode.replace("b'", "")
     GetGCode = GetGCode.replace("'", "")
-    #print (GetGCode)
-    ReadGCode = GetGCode.split('\\n')
+    if(GetGCode.find('\\r\\n') >= 0):
+        ReadGCode = GetGCode.split("\\r\\n")
+    elif(GetGCode.find('\\n') >= 0):
+        ReadGCode = GetGCode.split("\\n")
     #print (ReadGCode)
     
 
@@ -83,7 +88,11 @@ elif(args.code != None and args.file == None and args.url == None):
     #print (" ",ReadGCode)
 
 elif(args.code == None and args.file == None and args.url == None):
-    print ("\n No File or GCode has been add Enabling Typing Mode\n")
+    if(args.receive != None and args.sleep != None and args.wait == None):
+        PortReceiveData = 1
+        print ("\n No File or GCode has been add Enabling Receive Mode\n")
+    else:
+        print ("\n No File or GCode has been add Enabling Typing Mode\n")
 
 else:
     print (" Please do not provide a file and code at the same time")
@@ -92,7 +101,7 @@ else:
     #Display Functions in a Class
     #print(dir(SPort))
 while(inf==1):
-    if(args.code == None and args.file == None and args.url == None):
+    if(args.code == None and args.file == None and args.url == None and PortReceiveData == None):
         ReadGCode = input(" Waiting for command string seperated by <> enclosed in ''. \n\n >>> ")
         if(ReadGCode == 'EXIT' or ReadGCode == 'exit'):
             print ("\n\n Exiting pyGCodeLoader!!!")
@@ -106,7 +115,7 @@ while(inf==1):
             ReadGCode = ReadGCode.split("<>")
             #print (" ",ReadGCode)
     
-    if(ReadGCode!=""):    
+    if(ReadGCode != None):    
         print(' Staring loading GCode\n')
 
         for GCode in ReadGCode:
@@ -119,7 +128,7 @@ while(inf==1):
                     #Add log for sent
                     if(args.log != None):
                         logfile=open(args.log, "a+")
-                        logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Send: " + code.strip() + "\r\n")
+                        logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Send: " + code.strip() + "\n")
                     print(' Sending:   ' + code.strip())
                     SPort.write(str.encode(code + '\n'))
                     if(args.wait != None):
@@ -130,7 +139,7 @@ while(inf==1):
                             #Add log for received
                             if(args.log != None and args.wait != None):
                                 logfile=open(args.log, "a+")
-                                logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Recv: " + ReadPort + "\r\n")   
+                                logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Recv: " + ReadPort + "\n")   
                             print(' Received: ',ReadPort)
                             if(ReadPort.find(args.wait) >= 0):
                                 if(args.log != None and args.wait != None):
@@ -139,17 +148,23 @@ while(inf==1):
                     #print (ReadPort)
             if(args.sleep!=None):
                 time.sleep(float(args.sleep))
-                
-
         if(args.infloop==None):
             print ("\n\n Exiting pyGCodeLoader!!!")
             print (" >>>>>")
             print (" >>>>>>>>>>")
             print (" >>>>>>>>>>>>>>>>")
             break
+    if(PortReceiveData == 1):
+        ReadPort = SPort.readline()
+        ReadPort = ReadPort.decode("utf-8")
+        ReadPort = ReadPort.strip()
+        print(ReadPort)
+        if(args.log != None):
+            logfile=open(args.log, "a+")
+            logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Recv: " + ReadPort + "\n")
+        time.sleep(float(args.sleep))
 #Close file if Wait is empty
 if(args.log != None and args.wait == None):
     logfile.close()
-SPort.close()
 SPort.close()
 print("--- %s seconds ---" % (time.time() - start_time))
