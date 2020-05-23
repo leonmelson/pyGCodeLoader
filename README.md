@@ -26,10 +26,12 @@ optional arguments:
   -h, --help            show this help message and exit
   -p PORT, --port PORT  TTY/COM port path in '' if folders have spaces
   -pb PORTBAUD, --portbaud PORT Baud rate
-  -f FILE, --file FILE  Gcode file path in '' if folders have spaces
+  -f FILE, --file FILE Gcode file path in '' if folders have spaces
+  -u URL, --url URL Url to GCode
   -c CODE, --code CODE  Gcode string separated by <> enclosed in ''
   -w WAIT, --wait WAIT  Wait for a value="ok" to get returned before sending next line
   -s SLEEP, --sleep SLEEP Sleep time = float = 0.001 between each command sent
+  -r REICEVE, --receive RECEIVE Receive port data with --sleep time only when --code, --url, --file is empty = enable
   -l LOG, --log LOG     Append Log file path in '' if folders have spaces
   -inf INFLOOP, --infloop INFLOOP Infinite loop with manual code add until exit is typed = enable
   -debug DEBUG, --debug DEBUG Disable Writing to port and disable -w --wait function as no return will be available = enable
@@ -49,3 +51,5 @@ python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -f /media/file/gcode.gcode
 `screen -S 3DPRINTER1 -X stuff "python3 pyGCodeLoader.py -p /dev/serial0 -pb 115200 -inf enable^M"`
 ### SEND COMMANDS TO SCREEN
 `screen -S 3DPRINTER1 -X stuff "G28<>G1 X100 Y100^M" # Send a command`
+### CLOSE pyGCodeLoader
+`screen -S 3DPRINTER1 -X stuff "exit^M" # Send a command`
