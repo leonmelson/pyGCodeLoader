@@ -10,6 +10,8 @@ from urllib.request import urlopen
 start_time = time.time()
 ReadGCode = None
 PortReceiveData = None
+ReadLineCount = 0
+ReadLineNCount = str()
 inf = 1
 parser = argparse.ArgumentParser(description='pyGCodeLoader')
 parser.add_argument('-p', '--port', help="TTY/COM port path in '' if folders have spaces", required=False)
@@ -101,13 +103,14 @@ else:
     #Display Functions in a Class
     #print(dir(SPort))
 while(inf==1):
+    infstart_time = time.time()
     if(args.code == None and args.file == None and args.url == None and PortReceiveData == None):
         ReadGCode = input(" Waiting for command string seperated by <> enclosed in ''. \n\n >>> ")
         if(ReadGCode == 'EXIT' or ReadGCode == 'exit'):
-            print ("\n\n Exiting pyGCodeLoader!!!")
-            print (" >>>>>")
-            print (" >>>>>>>>>>")
-            print (" >>>>>>>>>>>>>>>")
+            #print ("\n\n Exiting pyGCodeLoader!!!")
+            #print (" >>>>>")
+            #print (" >>>>>>>>>>")
+            #print (" >>>>>>>>>>>>>>>")
             break
         elif(ReadGCode==""):
             ReadGCode = ""
@@ -119,6 +122,9 @@ while(inf==1):
         print(' Staring loading GCode\n')
 
         for GCode in ReadGCode:
+            if(args.file != None or args.url != None):
+                ReadLineCount = ReadLineCount+1
+                ReadLineNCount = "N" + str(ReadLineCount)
             code = GCodeLineFixer(GCode)
             if(len(code) > 0 or code != ""):                
                 if(args.debug == "enable"):
@@ -128,7 +134,8 @@ while(inf==1):
                     #Add log for sent
                     if(args.log != None):
                         logfile=open(args.log, "a+")
-                        logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Send: " + code.strip() + "\n")
+                        #SendCommandString = datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Send: " + code.strip() + "\n"
+                        logfile.write(datetime.now().strftime("%d/%b/%Y %H:%M:%S.%f") + " - Send: " + ReadLineNCount + code.strip() + "\n")
                     print(' Sending:   ' + code.strip())
                     SPort.write(str.encode(code + '\n'))
                     if(args.wait != None):
@@ -160,13 +167,15 @@ while(inf==1):
         time.sleep(float(args.sleep))
     #If Inf loop is disable exit
     if(args.infloop==None):
-        print ("\n\n Exiting pyGCodeLoader!!!")
-        print (" >>>>>")
-        print (" >>>>>>>>>>")
-        print (" >>>>>>>>>>>>>>>>")
+        #print ("\n\n Exiting pyGCodeLoader!!!")
+        #print (" >>>>>")
+        #print (" >>>>>>>>>>")
+        #print (" >>>>>>>>>>>>>>>>")
         break
 #Close file if Wait is empty
 if(args.log != None and args.wait == None):
     logfile.close()
 SPort.close()
-print("--- %s seconds ---" % (time.time() - start_time))
+if(args.debug != None):
+    print("--- %s seconds ---" % (time.time() - start_time))
+#TODO Add line Numbers
