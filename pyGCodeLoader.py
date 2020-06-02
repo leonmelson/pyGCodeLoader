@@ -39,7 +39,7 @@ print("\n TTY/COM Port = ", args.port, " / Gcode file = ", args.file, " / Gcode 
 
 def GCodeLineFixer(code):
     #Change code to Upper    
-    code = code.upper()
+    #code = code.upper()
     #remove comments
     if(code.find(';') >= 0):
         code = code.split(";", 1)
@@ -49,6 +49,10 @@ def GCodeLineFixer(code):
         code = code[0]
     else:
         code = code
+    #Add G1 if it is not added
+    if(len(code) > 0 or code != ""):
+        if(code[0] == "X" or code[0] == "Y" or code[0] == "Z"):
+            code = "G1" + code
     return code
 
 # Create New Serail Port
@@ -124,7 +128,7 @@ while(inf==1):
         for GCode in ReadGCode:
             if(args.file != None or args.url != None):
                 ReadLineCount = ReadLineCount+1
-                ReadLineNCount = "N" + str(ReadLineCount)
+                ReadLineNCount = "N" + str(ReadLineCount) + " "
             code = GCodeLineFixer(GCode)
             if(len(code) > 0 or code != ""):                
                 if(args.debug == "enable"):
@@ -178,4 +182,3 @@ if(args.log != None and args.wait == None):
 SPort.close()
 if(args.debug != None):
     print("--- %s seconds ---" % (time.time() - start_time))
-#TODO Add line Numbers
