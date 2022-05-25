@@ -79,6 +79,7 @@ if args.file is not None and args.code is None and args.url is None:
         # print (" ",ReadGCode)
 
 # Read URL
+# TODO: decode html url
 elif args.file is None and args.code is None and args.url is not None:
     print(' Url is being opened\n')
     GCodeFile = urlopen(args.url)
